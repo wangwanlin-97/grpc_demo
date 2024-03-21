@@ -1,0 +1,29 @@
+syntax  = "proto3";
+
+package grpc_test;
+
+service Hello{
+    rpc sayHello(HelloRequest) returns (HelloReply);
+}
+
+service Chat{
+    rpc chat(stream ChatRequest) returns (stream ChatResponse);
+}
+
+message HelloRequest{
+    string name = 1;
+    string age = 2;
+}
+
+message HelloReply{
+    string message = 1;
+}
+
+message ChatRequest{
+    string message = 1;
+    string name = 2;
+}
+
+message ChatResponse{
+    string message = 1;
+}
