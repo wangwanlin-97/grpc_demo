@@ -9,8 +9,10 @@ def run():
         chat_stub = messages_pb2_grpc.ChatStub(channel)
         while True:
             q=input("\nuser:")
+            if q.strip() == "":
+                continue
             response = chat_stub.chat(iter([ChatRequest(message=q,name="wang")]))
-            print("REPLY:")
+            print("REPLY:",end="")
             for message in response:
                 sys.stdout.flush()
                 print(f"{message.message}",end="")
