@@ -1,6 +1,6 @@
 from proto import messages_pb2_grpc
 from proto.messages_pb2 import ChatResponse
-from spark_api.auth import Asker
+from spark_api.Spark import Asker
 class ChatService(messages_pb2_grpc.ChatServicer):
     
     def chat(self,iter_request,context):
