@@ -97,53 +97,56 @@ class SparkClient:
         return request
 
 
-def askGpt(message: str):
-    config = configparser.ConfigParser()
-    config.read("config.ini")
-    appid = config.get("SPARK_API", "APPID")
-    APIkey = config.get("SPARK_API", "API_KEY")
-    APIscrect = config.get("SPARK_API", "API_SECRET")
-    sp = SparkClient(
-        model="v2.1",
-        appId=appid,
-        apiKey=APIkey,
-        apiScrect=APIscrect,
-    )
-    request = sp.get_request(message)
+class Asker:
+    res = ""
+    
+    def __init__(self):
+        config = configparser.ConfigParser()
+        self.res = ""
+        config.read("config.ini")
+        appid = config.get("SPARK_API", "APPID")
+        APIkey = config.get("SPARK_API", "API_KEY")
+        APIscrect = config.get("SPARK_API", "API_SECRET")
+        self.sp = SparkClient(
+            model="v2.1",
+            appId=appid,
+            apiKey=APIkey,
+            apiScrect=APIscrect,
+        )
+    def askGpt(self,message: str):
+        
+        request = self.sp.get_request(message)
 
-    def on_open(ws):
-        ws.send(json.dumps(request))
+        def on_open(ws):
+            ws.send(json.dumps(request))
 
-    def on_close(ws, b, c):
-        ...
+        def on_close(ws, b, c):
+            ...
 
-    def on_error(ws, error):
-        print("### error:", error)
+        def on_error(ws, error):
+            print("### error:", error)
 
-    def on_message(ws, message):
-        data = json.loads(message)
-        code = data["header"]["code"]
-        if code != 0:
-            ws.close()
-        else:
-            choices = data["payload"]["choices"]
-            status = choices["status"]
-            content = choices["text"][0]["content"]
-            print(content, end="")
-            if status == 2:
+        def on_message(ws, message):
+            data = json.loads(message)
+            code = data["header"]["code"]
+            if code != 0:
                 ws.close()
+            else:
+                choices = data["payload"]["choices"]
+                status = choices["status"]
+                content = choices["text"][0]["content"]
+                print(content,end="")
+                self.res+=content
+                if status == 2:
+                    ws.close()
 
-    ws = websocket.WebSocketApp(
-        sp.get_auth_url(),
+        ws = websocket.WebSocketApp(
+        self.sp.get_auth_url(),
         on_open=on_open,
         on_message=on_message,
         on_close=on_close,
         on_error=on_error,
     )
 
-    ws.run_forever()
-
-
-while True:
-    q = input("\nuser:")
-    askGpt(q)
+        ws.run_forever()
+        return self.res

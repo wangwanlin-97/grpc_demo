@@ -8,7 +8,7 @@ def run():
     with grpc.insecure_channel("localhost:50051") as channel:
         chat_stub = messages_pb2_grpc.ChatStub(channel)
         while True:
-            q=input("\nuser:")
+            q=input("user:")
             if q.strip() == "":
                 continue
             response = chat_stub.chat(iter([ChatRequest(message=q,name="wang")]))
@@ -16,6 +16,7 @@ def run():
             for message in response:
                 sys.stdout.flush()
                 print(f"{message.message}",end="")
+            print("\n")
                 
 
 if __name__ == "__main__":
