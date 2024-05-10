@@ -1,17 +1,12 @@
 from datetime import datetime
 from time import mktime
-import pytz
 import configparser
 from wsgiref.handlers import format_date_time
 import hmac
 import hashlib
 import base64
-from socket import socket
 import websocket
-import _thread as thread
-import ssl
 import json
-from urllib.parse import quote
 from urllib.parse import urlencode
 
 
@@ -135,7 +130,6 @@ class Asker:
                 choices = data["payload"]["choices"]
                 status = choices["status"]
                 content = choices["text"][0]["content"]
-                print(content,end="")
                 self.res+=content
                 if status == 2:
                     ws.close()

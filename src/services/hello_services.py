@@ -6,13 +6,12 @@ from proto.messages_pb2 import HelloReply
 class HelloService(messages_pb2_grpc.HelloServicer):
     def __init__(self):
         pass
-    
+
     def sayHello(self, request, context):
-        
+
         asker = Asker()
         response_message = asker.askGpt(request.message)
-        print(response_message)
-        # result = HelloReply(message=response_message)
-        # print(result)
-        result = messages_pb2_grpc.proto_dot_messages__pb2.HelloReply(message=response_message)
+        result = messages_pb2_grpc.proto_dot_messages__pb2.HelloReply(
+            message=response_message
+        )
         return result
