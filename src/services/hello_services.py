@@ -1,9 +1,18 @@
 from proto import messages_pb2_grpc
+from spark_api.Spark import Asker
+from proto.messages_pb2 import HelloReply
+
 
 class HelloService(messages_pb2_grpc.HelloServicer):
     def __init__(self):
         pass
     
     def sayHello(self, request, context):
-        result = messages_pb2_grpc.proto_dot_messages__pb2.HelloReply(message=f"{request.name} hello aaaaa")
+        
+        asker = Asker()
+        response_message = asker.askGpt(request.message)
+        print(response_message)
+        # result = HelloReply(message=response_message)
+        # print(result)
+        result = messages_pb2_grpc.proto_dot_messages__pb2.HelloReply(message=response_message)
         return result

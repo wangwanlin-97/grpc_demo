@@ -11,8 +11,7 @@ service Chat{
 }
 
 message HelloRequest{
-    string name = 1;
-    string age = 2;
+    string message = 1;
 }
 
 message HelloReply{
