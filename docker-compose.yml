@@ -1,6 +1,6 @@
 services:
   grpc:
-    name: grpc
+    container_name: grpc
     build: .
     ports:
       - "50051:50051"
