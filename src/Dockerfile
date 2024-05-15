@@ -1,8 +1,8 @@
-FROM python:3.10-slim
+FROM python:3.10.14-alpine
 
 WORKDIR /app
 
-COPY . .
+COPY . /app
 
 RUN pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple/
 
@@ -16,6 +16,6 @@ RUN pip3 install protobuf
 
 RUN pip3 install websocket-client
 
-ENV PYTHONPATH ./src
+ENV PYTHONPATH /app
 
-ENTRYPOINT ["python3", "./src/server/hello_server.py"]
+CMD ["python3", "./server/hello_server.py"]

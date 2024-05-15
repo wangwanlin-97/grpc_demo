@@ -9,9 +9,9 @@ class HelloService(messages_pb2_grpc.HelloServicer):
 
     def sayHello(self, request, context):
 
-        asker = Asker()
-        response_message = asker.askGpt(request.message)
+        # asker = Asker()
+        # response_message = asker.askGpt(request.message)
         result = messages_pb2_grpc.proto_dot_messages__pb2.HelloReply(
-            message=response_message
+            message="hello"
         )
         return result
