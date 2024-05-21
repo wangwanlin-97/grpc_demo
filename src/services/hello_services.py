@@ -12,6 +12,6 @@ class HelloService(messages_pb2_grpc.HelloServicer):
         asker = Asker()
         response_message = asker.askGpt(request.message)
         result = messages_pb2_grpc.proto_dot_messages__pb2.HelloReply(
-            message=response_message, context=context
+            message=response_message
         )
         return result
