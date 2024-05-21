@@ -1,20 +1,37 @@
 services:
-  grpc1:
+  grpc_hello:
     container_name: grpc1
     build: 
-      context: ./src
+      context: .
       dockerfile: Dockerfile
     ports:
-      - "5001:8888"
+      - "50051:8888"
     logging:
       driver: json-file
       options:
         max-size: 5m
         max-file: "1"
+    command: ["python3", "src/server/hello_server.py"]
+    environment:
+      - PYTHONPATH=./src
+    networks:
+      - net_grpc
+  grpc_web:
+    container_name: grpc_web
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "50052:3000"
+    environment:
+      - PORT=50051
+      - PYTHONPATH=./src
+    command: ["python3", "src/web/app.py"]
+    networks:
+      - net_grpc
+
+    
 
 networks:
-  network0:
+  net_grpc:
     driver: bridge
-    ipam:
-      config:
-        - subnet: ${NETWORK0_SUBNET}
